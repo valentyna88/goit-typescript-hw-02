@@ -1,0 +1,19 @@
+.loadBtn {
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: #5068ff;
+  color: #fff;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 32px auto;
+}
+.loadBtn:hover,
+.loadBtn:focus,
+.loadBtn:active {
+  background-color: #5c7ffc;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
