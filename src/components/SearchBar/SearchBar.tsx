@@ -1,13 +1,8 @@
 import { ChangeEvent, FC, FormEvent } from 'react';
+import { SearchBarProps } from './SearchBarProps';
 import { GrSearch } from 'react-icons/gr';
 import toast from 'react-hot-toast';
 import css from './SearchBar.module.css';
-
-interface SearchBarProps {
-  onSubmit: (query: string) => Promise<void>;
-  inputValue: string;
-  onInputChange: (newValue: string) => void;
-}
 
 const SearchBar: FC<SearchBarProps> = ({
   onSubmit,
