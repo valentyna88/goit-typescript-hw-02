@@ -23,6 +23,7 @@ function App() {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [imageTitle, setImageTitle] = useState<string>('');
   const [imageAuthor, setImageAuthor] = useState<string>('');
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   const toastStyles = {
     position: 'top-right',
@@ -36,20 +37,21 @@ function App() {
   } as const;
 
   useEffect(() => {
-    const fetchHandler = async (): Promise<void> => {
+    const fetchHandler = async () => {
       if (!query) return;
       try {
         setIsLoading(true);
 
-        const data = await fetchImages(query, page);
-        const results = data.results;
+        const { results, total_pages } = await fetchImages(query, page);
 
         if (results.length === 0) {
           toast('There is no results with this search query');
+          setHasMore(false);
           return;
         }
 
         setImages(prevImages => [...prevImages, ...results]);
+        setHasMore(total_pages !== page);
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -115,7 +117,7 @@ function App() {
       {error && <ErrorMessage message={error} />}
       <ImageGallery images={images} onImageClick={openModal} />
       {isLoading && <Loader />}
-      {images.length > 0 && !isLoading && (
+      {images.length > 0 && hasMore && !isLoading && (
         <LoadMoreBtn onLoadMore={loadMoreImages} />
       )}
       <ImageModal
