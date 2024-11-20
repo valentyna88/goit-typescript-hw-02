@@ -10,17 +10,19 @@ import ImageModal from '../ImageModal/ImageModal';
 import fetchImages from '../../unsplash-api';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { Image } from '../../types';
 
 function App() {
-  const [images, setImages] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [images, setImages] = useState<Image[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageTitle, setImageTitle] = useState<string>('');
+  const [imageAuthor, setImageAuthor] = useState<string>('');
 
   const toastStyles = {
     position: 'top-right',
@@ -31,10 +33,10 @@ function App() {
         color: '#ffffff',
       },
     },
-  };
+  } as const;
 
   useEffect(() => {
-    const fetchHandler = async () => {
+    const fetchHandler = async (): Promise<void> => {
       if (!query) return;
       try {
         setIsLoading(true);
@@ -47,14 +49,17 @@ function App() {
           return;
         }
 
-        setTotalPages(data.total_pages);
-
         setImages(prevImages =>
           prevImages ? [...prevImages, ...results] : results
         );
-      } catch (error) {
-        setError(error.message);
-        toast.error(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+          toast.error(error.message);
+        } else {
+          setError('An unknown error occurred');
+          toast.error('An unknown error occurred');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -71,27 +76,33 @@ function App() {
     }
   }, [images, page]);
 
-  const handleSubmit = searchQuery => {
+  const handleSubmit = (searchQuery: string): void => {
     setQuery(searchQuery);
     setPage(1);
-    setImages(null);
+    setImages([]);
     setInputValue('');
   };
 
-  const handleInputChange = newValue => {
+  const handleInputChange = (newValue: string): void => {
     setInputValue(newValue);
   };
 
-  const loadMoreImages = () => {
+  const loadMoreImages = (): void => {
     setPage(prevPage => prevPage + 1);
   };
 
-  const openModal = url => {
+  const openModal = (
+    url: string,
+    title: string | null,
+    author: string | null
+  ): void => {
     setIsModalOpen(true);
     setImageUrl(url);
+    setImageTitle(title || 'No description available');
+    setImageAuthor(author || 'Unknown author');
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setIsModalOpen(false);
   };
 
@@ -106,13 +117,15 @@ function App() {
       {error && <ErrorMessage message={error} />}
       <ImageGallery images={images} onImageClick={openModal} />
       {isLoading && <Loader />}
-      {!isLoading && images && page < totalPages && (
+      {images.length > 0 && !isLoading && (
         <LoadMoreBtn onClick={loadMoreImages} />
       )}
       <ImageModal
         isOpen={isModalOpen}
         onClose={closeModal}
         imageUrl={imageUrl}
+        imageTitle={imageTitle}
+        imageAuthor={imageAuthor}
       />
     </div>
   );

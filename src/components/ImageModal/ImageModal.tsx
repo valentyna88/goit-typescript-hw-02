@@ -13,16 +13,20 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    border: 'none',
-    background: 'none',
-    overflow: 'visible',
+  },
+  overlay: {
+    backgroundColor: 'rgba(15, 15, 16, 0.6)',
   },
 };
 
-const ImageModal = ({ isOpen, onClose, imageUrl }) => {
+const ImageModal = ({ isOpen, onClose, imageUrl, imageTitle, imageAuthor }) => {
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} style={customStyles}>
-      <img src={imageUrl} alt="Modal" className={css.modalImage} />
+      <img src={imageUrl} alt={imageTitle} />
+      <div className={css.modalContent}>
+        <p>{imageTitle}</p>
+        <p>{`Author: ${imageAuthor}`}</p>
+      </div>
     </Modal>
   );
 };

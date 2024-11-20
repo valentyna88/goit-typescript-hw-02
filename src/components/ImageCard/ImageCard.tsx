@@ -7,7 +7,9 @@ const ImageCard = ({ image, onClick }) => {
         className={css.image}
         src={image.urls.small}
         alt={image.alt_description}
-        onClick={onClick}
+        onClick={() =>
+          onClick(image.urls.regular, image.alt_description, image.user.name)
+        }
       />
     </div>
   );
