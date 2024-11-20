@@ -7,7 +7,7 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageModal from '../ImageModal/ImageModal';
 
-import fetchImages from '../../unsplash-api';
+import fetchImages from '../../api/unsplash-api';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Image } from '../../types';
