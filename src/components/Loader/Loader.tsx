@@ -1,16 +1,18 @@
+import { FC } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
-const Loader = () => {
+const Loader: FC = () => {
   return (
-    <RotatingLines
-      visible={true}
-      height="60"
-      width="60"
-      strokeColor="DodgerBlue"
-      strokeWidth="5"
-      animationDuration="0.75"
-      ariaLabel="rotating-lines-loading"
-    />
+    <>
+      <RotatingLines
+        visible={true}
+        width="60"
+        strokeColor="DodgerBlue"
+        strokeWidth="5"
+        animationDuration="0.75"
+        ariaLabel="rotating-lines-loading"
+      />
+    </>
   );
 };
 

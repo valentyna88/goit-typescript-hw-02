@@ -49,9 +49,7 @@ function App() {
           return;
         }
 
-        setImages(prevImages =>
-          prevImages ? [...prevImages, ...results] : results
-        );
+        setImages(prevImages => [...prevImages, ...results]);
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -76,7 +74,7 @@ function App() {
     }
   }, [images, page]);
 
-  const handleSubmit = (searchQuery: string): void => {
+  const handleSubmit = async (searchQuery: string): Promise<void> => {
     setQuery(searchQuery);
     setPage(1);
     setImages([]);
@@ -87,7 +85,7 @@ function App() {
     setInputValue(newValue);
   };
 
-  const loadMoreImages = (): void => {
+  const loadMoreImages = async (): Promise<void> => {
     setPage(prevPage => prevPage + 1);
   };
 
@@ -118,7 +116,7 @@ function App() {
       <ImageGallery images={images} onImageClick={openModal} />
       {isLoading && <Loader />}
       {images.length > 0 && !isLoading && (
-        <LoadMoreBtn onClick={loadMoreImages} />
+        <LoadMoreBtn onLoadMore={loadMoreImages} />
       )}
       <ImageModal
         isOpen={isModalOpen}

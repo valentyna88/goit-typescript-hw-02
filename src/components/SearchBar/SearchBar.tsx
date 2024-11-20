@@ -1,16 +1,29 @@
+import { ChangeEvent, FC, FormEvent } from 'react';
 import { GrSearch } from 'react-icons/gr';
-import css from './SearchBar.module.css';
 import toast from 'react-hot-toast';
+import css from './SearchBar.module.css';
 
-const SearchBar = ({ onSubmit, inputValue, onInputChange }) => {
-  const handleSubmit = event => {
+interface SearchBarProps {
+  onSubmit: (query: string) => Promise<void>;
+  inputValue: string;
+  onInputChange: (newValue: string) => void;
+}
+
+const SearchBar: FC<SearchBarProps> = ({
+  onSubmit,
+  inputValue,
+  onInputChange,
+}) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
 
     if (inputValue.trim() === '') {
       toast.error('Please enter a search term!');
       return;
     }
-    onSubmit(inputValue);
+    await onSubmit(inputValue);
     onInputChange('');
   };
 
@@ -25,7 +38,9 @@ const SearchBar = ({ onSubmit, inputValue, onInputChange }) => {
           autoFocus
           placeholder="Search images and photos"
           value={inputValue}
-          onChange={event => onInputChange(event.target.value)}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            onInputChange(event.target.value)
+          }
         />
         <button className={css.searchButton} type="submit">
           <GrSearch />
