@@ -1,5 +1,8 @@
-import css from './ImageModal.module.css';
+import { FC } from 'react';
+import { ImageModalProps } from './ImageModalProps';
 import Modal from 'react-modal';
+import css from './ImageModal.module.css';
+
 Modal.setAppElement('#root');
 
 const customStyles = {
@@ -14,12 +17,15 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
-  overlay: {
-    backgroundColor: 'rgba(15, 15, 16, 0.6)',
-  },
 };
 
-const ImageModal = ({ isOpen, onClose, imageUrl, imageTitle, imageAuthor }) => {
+const ImageModal: FC<ImageModalProps> = ({
+  isOpen,
+  onClose,
+  imageUrl,
+  imageTitle,
+  imageAuthor,
+}) => {
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} style={customStyles}>
       <img src={imageUrl} alt={imageTitle} />
